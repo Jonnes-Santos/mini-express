@@ -1,17 +1,17 @@
+require('dotenv').config();
 const { Pool } = require('pg');
 
 const pool = new Pool({
-  user: 'postgres',       // Usuário padrão
-  host: 'localhost',
-  database: 'mini_express',
-  password: '019856',  // A senha que você definiu na instalação
-  port: 5432,
+  user: process.env.PG_USER || 'postgres',
+  host: process.env.PG_HOST || 'localhost',
+  database: process.env.PG_DATABASE || 'mini_express',
+  password: process.env.PG_PASSWORD,
+  port: process.env.PG_PORT || 5432,
 });
 
-// Teste de conexão (adicione estas linhas)
-pool.query('SELECT NOW()', (err, res) => {
-  if (err) console.error('Erro ao conectar ao PostgreSQL:', err);
-  else console.log('✅ PostgreSQL conectado em:', res.rows[0].now);
-});
+// Teste de conexão
+pool.query('SELECT NOW()')
+  .then(() => console.log('✅ PostgreSQL conectado'))
+  .catch(err => console.error('Erro na conexão:', err));
 
 module.exports = pool;
